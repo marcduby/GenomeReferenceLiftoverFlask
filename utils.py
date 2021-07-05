@@ -7,7 +7,11 @@ from cmmodule.utils import map_coordinates
 CHROM = 'chrom'
 START = 'start'
 END = 'end'
-FILE_MAPPING = "Data/hg19ToHg38.over.chain.gz"
+FILE_MAPPING_HG19_HG38 = "Data/hg19ToHg38.over.chain.gz"
+
+# data
+# get the hg19/hg38 chain map
+(map_chain_hg19_hg38, targetChromSizes, sourceChromSizes) = read_chain_file(FILE_MAPPING_HG19_HG38)
 
 # methods
 def translate_list_hg19_to_hg38(region_list, debug=False):
@@ -61,7 +65,8 @@ def liftover_locus(chrom, start, end, debug=False):
     result = []
 
     # get the mapping 
-    mapping = get_chain_map(FILE_MAPPING)
+    # mapping = get_chain_map(FILE_MAPPING)
+    mapping = map_chain_hg19_hg38
 
     # get the mapped coorfdinates
     a = map_coordinates(mapping, chrom, start, end, strand)
@@ -111,7 +116,7 @@ def get_mapped_fields(mapped, debug=False):
 
 
 def get_chain_map(file_location, debug=False):
-    ''' method to get the chanin map from the chain file '''
+    ''' method to get the chain map from the chain file '''
     map_chain = None
 
     # get the chain map
