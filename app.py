@@ -1,6 +1,6 @@
 
 from flask import Flask, request, jsonify
-
+from utils import translate_list_hg19_to_hg38
 
 app=Flask(__name__)
 
@@ -17,12 +17,15 @@ def liftover():
 
     # get the payload
     input = request.json
+    regions_input = input.get('regions')
+    result, debug = translate_list_hg19_to_hg38(region_list=regions_input, debug=True)
+    print("app DEBUG: {}".format(debug))
 
     # log
     print("got payload: \n{}".format(input))
 
     # return
-    return jsonify({"regions": result})
+    return jsonify({"regions": result, "debug": debug})
 
 
 if __name__ == "__main__":

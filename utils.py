@@ -1,5 +1,10 @@
 
 
+# constants
+CHROM = 'chrom'
+START = 'start'
+END = 'end'
+
 
 # methods
 def translate_list_hg19_to_hg38(region_list, debug=False):
@@ -10,16 +15,19 @@ def translate_list_hg19_to_hg38(region_list, debug=False):
 
     # translate
     for item in region_list:
-        chrom = item['chrom']
-        start = item['start']
-        end = item['end']
+        chrom = item[CHROM]
+        start = item[START]
+        end = item[END]
 
         # get the result for the item
         translated = translate_region_hg19_to_hg38(chrom, start, end, debug)
 
         # append the result
         result += translated
-        debug += {"input": item, "output": translated}
+        temp_dict = {"input": item, "output": translated}
+        debug.append(temp_dict)
+        print("DEBUG dict: {}".format(temp_dict))
+        print("DEBUG: {}".format(debug))
             
     # return
     return result, debug
@@ -31,7 +39,13 @@ def translate_region_hg19_to_hg38(chrom, start, end, debug=False):
     result = []
 
     # translate
-
+    # TODO - use crossmap
+    item = {}
+    item[CHROM] = chrom
+    item[START] = end
+    item[END] = start
+    result.append(item)
+    
     # return
     return result
 
