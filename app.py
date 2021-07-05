@@ -18,6 +18,11 @@ def liftover():
     # get the payload
     input = request.json
     regions_input = input.get('regions')
+
+    # log
+    print("got input: {}".format(regions_input))
+
+    # get the translation
     result, debug = translate_list_hg19_to_hg38(region_list=regions_input, debug=True)
     print("app DEBUG: {}".format(debug))
 
