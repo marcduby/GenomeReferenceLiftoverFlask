@@ -24,24 +24,40 @@ def translate_ld_server_input_hg19_to_hg38(input_ld_server_map, debug=False):
     chrom = None
     masks = None
     groups = None 
+    new_groups = {}
 
     # build a list of the regions
     chrom = input_ld_server_map.get(CHROM)
     masks = input_ld_server_map.get(MASK_DEFINITIONS)
     if chrom and masks:
-        groups = masks[groups]
-        if groups:
-            # all in order, translate top level region first, then groups
-            start = input_ld_server_map.get(START)
-            stop = input_ld_server_map.get(END)
-            if start and stop:
-                translasted = translate_region_hg19_to_hg38(chrom, start, stop)
-                if len(translasted) > 0:
-                    result_ld_server[START] = translasted[0][START]
-                    result_ld_server[END] = translasted[0][END]
+        for (mask_index, mask_item) in enumerate(masks):
+            groups = masks[mask_index].get(GROUPS)
+            if groups:
+                # all in order, translate top level region first, then groups
+                start = input_ld_server_map.get(START)
+                stop = input_ld_server_map.get(END)
+                if start and stop:
+                    translated = translate_region_hg19_to_hg38(chrom, start, start)
+                    if translated and len(translated) > 0:
+                        result_ld_server[START] = translated[0][START]
+                    translated = translate_region_hg19_to_hg38(chrom, stop, stop)
+                    if translated and len(translated) > 0:
+                        result_ld_server[END] = translated[0][END]
 
-            # translate the regions
-            
+                # translate the regions
+                new_groups = {}
+                print(groups)
+                for key, value in groups.items():
+                    start = value.get(START)
+                    stop = value.get(END)
+                    translated = translate_region_hg19_to_hg38(chrom, start, stop)
+
+                    for (group_index, group_item) in enumerate(translated):
+                        new_groups[key + str(group_index)] = {START: group_item.get(START), END: group_item.get(END)}
+
+                # replace the translated regions on the results
+                result_ld_server[MASK_DEFINITIONS][mask_index][GROUPS] = new_groups
+
     # return
     return result_ld_server
 
