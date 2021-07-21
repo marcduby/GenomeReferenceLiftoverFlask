@@ -1,0 +1,25 @@
+{
+    "chrom": "1",
+    "start": 1,
+    "stop": 8000,
+    "maskDefinitions": [
+      {
+        "id": 11,
+        "name": "My locus of interest",
+        "description": "Example of specifying groups as regions",
+        "genome_build": "GRCh37",
+        "group_type": "REGION",
+        "identifier_type": "COORDINATES",
+        "groups": {
+          "enhancer-1": {
+            "start": 1,
+            "stop": 5000
+          },
+          "enhancer-2": {
+            "start": 7000,
+            "stop": 8000
+          }
+        }
+      }
+    ]
+  }

@@ -2,11 +2,14 @@
 # imports
 from cmmodule.utils     import read_chain_file
 from cmmodule.utils import map_coordinates
+import copy
 
 # constants
 CHROM = 'chrom'
 START = 'start'
-END = 'end'
+END = 'stop'
+MASK_DEFINITIONS = 'maskDefinitions'
+GROUPS = 'groups'
 FILE_MAPPING_HG19_HG38 = "Data/hg19ToHg38.over.chain.gz"
 
 # data
@@ -14,6 +17,34 @@ FILE_MAPPING_HG19_HG38 = "Data/hg19ToHg38.over.chain.gz"
 (map_chain_hg19_hg38, targetChromSizes, sourceChromSizes) = read_chain_file(FILE_MAPPING_HG19_HG38)
 
 # methods
+def translate_ld_server_input_hg19_to_hg38(input_ld_server_map, debug=False):
+    ''' will take ld server input format, ligtover regions, return in ld server format '''
+    # initialize
+    result_ld_server = copy.deepcopy(input_ld_server_map)
+    chrom = None
+    masks = None
+    groups = None 
+
+    # build a list of the regions
+    chrom = input_ld_server_map.get(CHROM)
+    masks = input_ld_server_map.get(MASK_DEFINITIONS)
+    if chrom and masks:
+        groups = masks[groups]
+        if groups:
+            # all in order, translate top level region first, then groups
+            start = input_ld_server_map.get(START)
+            stop = input_ld_server_map.get(END)
+            if start and stop:
+                translasted = translate_region_hg19_to_hg38(chrom, start, stop)
+                if len(translasted) > 0:
+                    result_ld_server[START] = translasted[0][START]
+                    result_ld_server[END] = translasted[0][END]
+
+            # translate the regions
+            
+    # return
+    return result_ld_server
+
 def translate_list_hg19_to_hg38(region_list, debug=False):
     ''' method to translate from hg19 to hg38 genome reference '''
     # initialize
@@ -47,7 +78,8 @@ def translate_region_hg19_to_hg38(chrom, start, end, debug=False):
 
     # translate
     # TODO - use crossmap
-    result = liftover_locus(chrom, start, end)
+    if chrom and start and end:
+        result = liftover_locus(chrom, start, end)
     # item = {}
     # item[CHROM] = chrom
     # item[START] = end
