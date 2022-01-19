@@ -1,4 +1,7 @@
 # GenomeReferenceLiftoverFlask
 Flask application to convert human genome reference regions between HG builds
 
-test
+## libraries required
+- pytest
+- CrossMap
+
