@@ -1,0 +1,26 @@
+name: test the unit tests
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+  steps:
+  - uses: actions/checkout@v2
+  - runs: |
+    git fetch --prune --unshallow
+  - name: set up python 3.8
+    uses: actions/setup-python@v1
+    with: 
+      python-version: 3.8
+  - name: install dependencies
+    run: |
+      python -m pip install --upgrade pip
+  - name: test with pytest 
+    run: |
+      pip install pytest
+      pip install CrossMap==0.5.4
+      python3 -m pytest -vv

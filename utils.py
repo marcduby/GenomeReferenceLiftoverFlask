@@ -62,7 +62,11 @@ def translate_ld_server_input_hg19_to_hg38(input_ld_server_map, debug=False):
     return result_ld_server
 
 def translate_list_hg19_to_hg38(region_list, debug=False):
-    ''' method to translate from hg19 to hg38 genome reference '''
+    ''' 
+    method to translate list of regions from hg19 to hg38 genome reference 
+    input - list of {chrom: <value>, start: <value>, stop: <value>}
+    output - list of {chrom: <value>, start: <value>, stop: <value>}
+    '''
     # initialize
     result = []
     debug = []
@@ -80,15 +84,20 @@ def translate_list_hg19_to_hg38(region_list, debug=False):
         result += translated
         temp_dict = {"input": item, "output": translated}
         debug.append(temp_dict)
-        print("DEBUG dict: {}".format(temp_dict))
+        print("DEBUG temp dict: {}".format(temp_dict))
         print("DEBUG: {}".format(debug))
             
     # return
+    print("DEBUG: return {}".format(debug))
     return result, debug
 
 
 def translate_region_hg19_to_hg38(chrom, start, end, debug=False):
-    ''' method to translate from hg19 to hg38 genome reference '''
+    ''' 
+    method to translate a region from hg19 to hg38 genome reference 
+    input - {chrom: <value>, start: <value>, stop: <value>}
+    output - list of {chrom: <value>, start: <value>, stop: <value>}
+    '''
     # initialize
     result = []
 
