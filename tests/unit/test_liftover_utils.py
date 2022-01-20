@@ -24,7 +24,7 @@ def test_translate_region():
 
     # test the translation function on the first region
     list_result = translate_region_hg19_to_hg38(chrom=region1.get('chrom'), start=region1.get('start'), end=region1.get('stop'), debug=False)
-    assert len(list_result) == 1
+    assert len(list_result) == 2
 
     # test the translation function on the second region
     list_result = translate_region_hg19_to_hg38(chrom=region2.get('chrom'), start=region2.get('start'), end=region2.get('stop'), debug=False)
